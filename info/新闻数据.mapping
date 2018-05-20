@@ -70,3 +70,14 @@ POST sougou_news/sougou_news/_search
     }
   }
 }
+
+POST sougou_news/sougou_news/_search?size=0
+{
+  "aggs": {
+    "doc_type_count": {
+      "terms": {
+        "field": "doc_type"
+      }
+    }
+  }
+}
