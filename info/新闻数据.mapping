@@ -8,9 +8,6 @@ PUT /sougou_docs/?pretty
 {
   "mappings": {
     "sougou_docs": {
-	  "_id": {
-		"path": "doc_id"
-	  },
       "properties": {
         "doc_id": {
           "type":  "keyword"
@@ -42,18 +39,34 @@ POST /sougou_docs/_analyze?pretty
   "text": "我是中国人"
 }
 
-POST sougou_news/_search
+POST sougou_news/sougou_news/_delete_by_query
 {
   "query": {
     "match_all": {}
   }
 }
 
-PUT sougou_news/sougou_news/1?pretty
+POST sougou_news/sougou_news/_search
 {
-  "doc_id": "1",
-  "doc_url": "http://www.baidu.com",
-  "doc_title": "测试标题",
-  "doc_content": "测试内容",
-  "doc_type": "news"
+  "query": {
+    "match_all": {}
+  }
+}
+
+POST sougou_news/sougou_news/_search
+{
+  "query": {
+    "bool": {
+      "filter": {
+        "exists": {
+          "field": "doc_type"
+        }
+      },
+      "must_not": [
+        {"term": {
+          "doc_type": ""
+        }}
+      ]
+    }
+  }
 }
