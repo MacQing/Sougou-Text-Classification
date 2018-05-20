@@ -1,0 +1,59 @@
+DELETE /sougou_docs
+
+GET /_cat/indices?v
+
+GET /_cat/pending_tasks
+
+PUT /sougou_docs/?pretty
+{
+  "mappings": {
+    "sougou_docs": {
+	  "_id": {
+		"path": "doc_id"
+	  },
+      "properties": {
+        "doc_id": {
+          "type":  "keyword"
+        },
+		"doc_url": {
+          "type":  "keyword"
+        },
+		"doc_title": {
+          "type":  "text",
+		  "analyzer": "ik_max_word",
+		  "search_analyzer": "ik_max_word"
+        },
+		"doc_content": {
+          "type":  "text",
+		  "analyzer": "ik_max_word",
+		  "search_analyzer": "ik_max_word"
+        },
+		"doc_type": {
+		  "type": "keyword"
+		}
+      }
+    }
+  }
+}
+
+POST /sougou_docs/_analyze?pretty
+{
+  "analyzer": "ik_max_word",
+  "text": "我是中国人"
+}
+
+POST sougou_news/_search
+{
+  "query": {
+    "match_all": {}
+  }
+}
+
+PUT sougou_news/sougou_news/1?pretty
+{
+  "doc_id": "1",
+  "doc_url": "http://www.baidu.com",
+  "doc_title": "测试标题",
+  "doc_content": "测试内容",
+  "doc_type": "news"
+}
